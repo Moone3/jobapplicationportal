@@ -6,7 +6,7 @@ This project is a server-rendered PHP application: its pages and backend run in 
 
 1. Push this project to a Git provider connected to Railway.
 2. Create a Railway project and deploy the repository as a service. Set the service's **Root Directory** to the directory containing this `Dockerfile` and `index.php` if they are in a subdirectory of the repository.
-3. Railway will build the included Dockerfile. The container runs Apache and PHP 8.3 with the `mysqli` extension.
+3. Railway will build the included Dockerfile. The container runs Apache and PHP 8.3 with the `mysqli` extension. The image explicitly enables only Apache's `mpm_prefork` module, which is compatible with this PHP setup.
 4. Generate a public domain for the PHP service in Railway's **Settings → Networking**.
 
 The container listens on Railway's `PORT`. Do not hard-code a port in the Railway service settings.
@@ -32,7 +32,13 @@ The container listens on Railway's `PORT`. Do not hard-code a port in the Railwa
    mysqldump --single-transaction --routines --triggers -u root -p job_application --result-file=job_application.sql
    ```
 
-   To import, temporarily enable the MySQL service's public TCP proxy in Railway, connect with the proxy host and port plus the Railway database username and database name, then run `SOURCE C:/full/path/to/job_application.sql;` in the MySQL client. Disable public access when the import is complete. Do not put database passwords in shell history or commit the dump.
+   To import, temporarily enable the MySQL service's public TCP proxy in Railway, then connect with the proxy host and port plus the Railway database username and database name:
+
+   ```text
+   mysql -h HOST -P PORT -u USER -p DATABASE_NAME
+   ```
+
+   At the MySQL prompt, run `SOURCE C:/full/path/to/job_application.sql;`. Disable public access when the import is complete. Do not put database passwords in shell history or commit the dump.
 
 ## 3. Persist uploaded files
 

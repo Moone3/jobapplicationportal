@@ -1,6 +1,14 @@
 FROM php:8.3-apache
 
-RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install mysqli \
+    && for module_file in /etc/apache2/mods-enabled/mpm_*.load; do \
+        [ -e "$module_file" ] || continue; \
+        module="${module_file##*/}"; \
+        module="${module%.load}"; \
+        if [ "$module" != "mpm_prefork" ]; then a2dismod "$module"; fi; \
+    done \
+    && a2enmod mpm_prefork \
+    && apache2ctl -M | grep -q 'mpm_prefork_module'
 
 COPY admin/ /var/www/html/admin/
 COPY applicant/ /var/www/html/applicant/
