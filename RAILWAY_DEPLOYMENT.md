@@ -6,7 +6,7 @@ This project is a server-rendered PHP application: its pages and backend run in 
 
 1. Push this project to a Git provider connected to Railway.
 2. Create a Railway project and deploy the repository as a service. Set the service's **Root Directory** to the directory containing this `Dockerfile` and `index.php` if they are in a subdirectory of the repository.
-3. Railway will build the included Dockerfile. The container runs Apache and PHP 8.3 with the `mysqli` extension. The image explicitly enables only Apache's `mpm_prefork` module, which is compatible with this PHP setup.
+3. Railway will build the included Dockerfile. The container runs Apache and PHP 8.3 with the `mysqli` extension. The image and startup script explicitly enable only Apache's `mpm_prefork` module, which is compatible with this PHP setup.
 4. Generate a public domain for the PHP service in Railway's **Settings → Networking**.
 
 The container listens on Railway's `PORT`. Do not hard-code a port in the Railway service settings.
