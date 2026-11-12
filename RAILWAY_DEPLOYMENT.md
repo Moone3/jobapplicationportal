@@ -6,7 +6,7 @@ This project is a server-rendered PHP application: its pages and backend run in 
 
 1. Push this project to a Git provider connected to Railway.
 2. Create a Railway project and deploy the repository as a service. Set the service's **Root Directory** to the directory containing this `Dockerfile` and `index.php` if they are in a subdirectory of the repository.
-3. Railway will build the included Dockerfile. The container runs Apache and PHP 8.3 with the `mysqli` extension. The image and startup script explicitly enable only Apache's `mpm_prefork` module, which is compatible with this PHP setup.
+3. Railway will build the included Dockerfile. The container runs Apache and PHP 8.3 with the `mysqli` extension. The image and startup script explicitly enable only Apache's `mpm_prefork` module, which is compatible with this PHP setup. PHP's upload limit is configured above the app's 5 MB resume limit.
 4. Generate a public domain for the PHP service in Railway's **Settings → Networking**.
 
 The container listens on Railway's `PORT`. Do not hard-code a port in the Railway service settings.
@@ -26,19 +26,15 @@ The container listens on Railway's `PORT`. Do not hard-code a port in the Railwa
 
    Replace `MySQL` with the exact database service name if you named it differently. Keep these values private; do not commit credentials.
 
-3. The repository does not include a database schema or SQL migration. A newly provisioned Railway database is empty, so export your existing local `job_application` database and import it into Railway before using the app. For example, from a terminal with MySQL tools installed:
+3. A newly provisioned Railway database is empty. The repository includes [`database_schema.sql`](./database_schema.sql), which creates the 13 application tables without copying any user, job, or message data. To initialize the schema, use the MySQL command-line client with the Railway MySQL service's public TCP proxy temporarily enabled:
 
    ```text
-   mysqldump --single-transaction --routines --triggers -u root -p job_application --result-file=job_application.sql
+   mysql -h HOST -P PORT -u USER -p DATABASE_NAME < database_schema.sql
    ```
 
-   To import, temporarily enable the MySQL service's public TCP proxy in Railway, then connect with the proxy host and port plus the Railway database username and database name:
+   Replace `HOST`, `PORT`, `USER`, and `DATABASE_NAME` with the Railway MySQL service's public proxy details and credentials. Use the database name from `MYSQLDATABASE` (often `railway`). The `-p` option prompts for the password. Run the command from the directory containing `database_schema.sql`; alternatively, run the statements from that file in a MySQL client connected to the Railway database.
 
-   ```text
-   mysql -h HOST -P PORT -u USER -p DATABASE_NAME
-   ```
-
-   At the MySQL prompt, run `SOURCE C:/full/path/to/job_application.sql;`. Disable public access when the import is complete. Do not put database passwords in shell history or commit the dump.
+   This creates empty tables. If you also need your existing local accounts, jobs, or other records, export and import the database data separately. Disable public access when the import is complete. Do not put database passwords in shell history or commit a data dump.
 
 ## 3. Persist uploaded files
 

@@ -19,6 +19,7 @@ COPY creator/ /var/www/html/creator/
 COPY includes/ /var/www/html/includes/
 COPY recruiter/ /var/www/html/recruiter/
 COPY *.php /var/www/html/
+COPY uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 COPY railway-entrypoint.sh /usr/local/bin/railway-entrypoint
 
 RUN mkdir -p /opt/seed-uploads \
