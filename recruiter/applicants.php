@@ -1612,8 +1612,8 @@ function is_final_application_status($status) {
                             </a>
 
                             <?php if (!empty($app['resume_file'])) { ?>
-                                <a href="../assets/uploads/resumes/<?php echo htmlspecialchars($app['resume_file']); ?>" target="_blank" class="btn btn-light">
-                                    View Resume
+                                <a href="../assets/uploads/resumes/<?php echo htmlspecialchars($app['resume_file']); ?>" download class="btn btn-light">
+                                    Download Resume
                                 </a>
                             <?php } ?>
 

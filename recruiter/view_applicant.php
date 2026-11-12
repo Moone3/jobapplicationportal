@@ -1018,11 +1018,7 @@ $salary_max = floatval($applicant['salary_max'] ?? 0);
 
                 <div class="actions" style="justify-content:center;">
                     <?php if (!empty($resume_path)) { ?>
-                        <a href="<?php echo htmlspecialchars($resume_path); ?>" target="_blank" class="btn btn-primary">
-                            View Resume
-                        </a>
-
-                        <a href="<?php echo htmlspecialchars($resume_path); ?>" download class="btn btn-light">
+                        <a href="<?php echo htmlspecialchars($resume_path); ?>" download class="btn btn-primary">
                             Download Resume
                         </a>
                     <?php } elseif (!empty($resume_file)) { ?>
