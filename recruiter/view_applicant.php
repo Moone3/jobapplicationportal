@@ -274,18 +274,21 @@ if ($applicant_initial === "") {
 $resume_file = "";
 $resume_path = "";
 
-if (!empty($applicant['application_resume'])) {
-    $resume_file = $applicant['application_resume'];
-} elseif (!empty($applicant['profile_resume'])) {
-    $resume_file = $applicant['profile_resume'];
+foreach ([$applicant['application_resume'], $applicant['profile_resume']] as $candidate_resume) {
+    if (!empty($candidate_resume)) {
+        $candidate_resume = basename($candidate_resume);
+        $resume_check = __DIR__ . "/../assets/uploads/resumes/" . $candidate_resume;
+
+        if (is_file($resume_check)) {
+            $resume_file = $candidate_resume;
+            $resume_path = "../assets/uploads/resumes/" . rawurlencode($candidate_resume);
+            break;
+        }
+    }
 }
 
-if (!empty($resume_file)) {
-    $resume_check = __DIR__ . "/../assets/uploads/resumes/" . $resume_file;
-
-    if (file_exists($resume_check)) {
-        $resume_path = "../assets/uploads/resumes/" . $resume_file;
-    }
+if ($resume_file === "") {
+    $resume_file = $applicant['application_resume'] ?: $applicant['profile_resume'] ?: "";
 }
 
 $salary_min = floatval($applicant['salary_min'] ?? 0);
@@ -1019,7 +1022,7 @@ $salary_max = floatval($applicant['salary_max'] ?? 0);
                 <div class="actions" style="justify-content:center;">
                     <?php if (!empty($resume_path)) { ?>
                         <a href="<?php echo htmlspecialchars($resume_path); ?>" download class="btn btn-primary">
-                            Download Resume
+                            View Resume
                         </a>
                     <?php } elseif (!empty($resume_file)) { ?>
                         <span class="btn btn-light">Resume file not found</span>
