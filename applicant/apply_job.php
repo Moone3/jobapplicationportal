@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply'])) {
                             INSERT INTO applications 
                                 (job_id, applicant_id, resume_file, cover_letter, status)
                             VALUES 
-                                (?, ?, ?, ?, 'pending')
+                                (?, ?, ?, ?, 'application received')
                         ";
 
                         $insert_stmt = mysqli_prepare($conn, $insert_sql);
