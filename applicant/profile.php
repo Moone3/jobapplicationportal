@@ -1222,8 +1222,8 @@ if (!empty($profile['resume_file'])) {
                     <div class="info-box">
                         <strong>Resume</strong>
                         <?php if (!empty($resume_web_path)) { ?>
-                            <a href="<?php echo htmlspecialchars($resume_web_path); ?>" target="_blank">
-                                View Current Resume
+                            <a href="<?php echo htmlspecialchars($resume_web_path); ?>" download>
+                                Download Current Resume
                             </a>
                         <?php } elseif (!empty($profile['resume_file'])) { ?>
                             <p>Resume saved but file not found in uploads folder.</p>
